@@ -1,0 +1,42 @@
+#ourText {
+    top:0;
+    bottom: 0;
+    resize: none;
+    padding: 1rem;
+    position: absolute;
+}
+
+body {
+    background-color: #EEEEEE;
+}
+
+#outer {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+}
+#outField {
+    position: absolute;
+}
+
+#controls {
+    position: fixed;
+    right: 2em;
+    bottom: 2em;
+    width: 20em;
+}
+#controls * {
+    display: block;
+}
+
+button {
+    width: 15em;
+    height: 2em;
+}
+#wrap {
+    position: fixed;
+    left: 0;
+    top: 10px;
+    bottom: 10px;
+
+}

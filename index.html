@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Readifry demo</title>
+    <link rel='stylesheet' type="text/css" href="style.css"/>
+
+    <script src="main.js"></script>
+</head>
+<body onkeydown="Main.onKey(event)">
+<div id="wrap">
+<textarea id="ourText" onload="Main.setSourceField(this)">
+    Here's a hack to help you increase your reading speed. Gritz (this is not Gritz) is an open source text file reader, which reduces the need to look around the screen. Words pop up one at a time, but at a configurable pace.
+
+    [Peter Feuerer] got the idea for Gritz from Spritz, a commercial product for speed reading. The creators of Spritz took three years to develop their software, and recently released a demo. They claim people can read at 1000 WPM using this technology. Spritz is taking applications for access to their APIs, which will allow developers to integrate the software into their own applications. However, a fully open source version with no restrictions would be even better.
+
+    Using Gritz, [Peter] claims to have read a book with a 75% improvement in his reading speed. He admits it’s not perfect, and there’s still much development to do. Gritz is written in Perl, uses Gtk2 for its GUI, and comes with instructions for running on Linux, OS X, and Windows. It’s released under the GPL, so you can clone the Github repo and start playing around with accelerated reading.
+
+</textarea>
+
+<div id="outer">
+    <div id='outField' onload="Main.setField(this)">fooo!</div>
+</div>
+
+<div id="controls">
+    <div><input type="range" min="60" max="1500" onchange="Main.setRate(this.value)">
+    <div id="rate"></div>
+    </div>
+
+    <button onclick="Main.go()">go</button>
+    <button onclick="Main.pause()">pause</button>
+    <button onclick="Main.back(2)">back 2 seconds</button>
+    <button onclick="Main.restart()">restart</button>
+
+</div>
+
+<script language="JavaScript">
+    Main.start()
+</script>
+
+</body>
+</html>
