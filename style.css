@@ -40,6 +40,7 @@ body {
 
 #outField, #marker {
     position: absolute;
+    font-size: 250%;
 }
 #outField {
     bottom:50%;
@@ -51,19 +52,18 @@ body {
 
 #help {
     position: fixed;
-    right: 0;
-    top: 0;
-    padding: 1em;
+    right: -1.5em;
+    top: -1.5em;
+    padding: 2em 2em .15em .15em;
     border-radius: 1em;
-    margin: .5em;
     box-shadow: 0px 0px 5px  #888888 inset;
-
 }
+
 #controls {
     position: fixed;
-    right: 2em;
-    bottom: 2em;
-    width: 20em;
+    right: .5em;
+    bottom: .5em;
+    width: auto;
 }
 #controls * {
     display: block;

@@ -267,7 +267,7 @@ var Main = (function(window) {
         },
         killMost: function(event) {
             if(event.keyCode == 13 && event.shiftKey) return;
-           event.preventDefault();
+       //    event.preventDefault();
             event.stopPropagation();
 
         },
