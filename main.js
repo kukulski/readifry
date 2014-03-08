@@ -5,20 +5,21 @@
 var Main = (function(window) {
     var state = {
         heightFactor:3,
-        flatWidth:1.5,
-        limit:10
+        flatWidth:4,
+        limit:9
     };
 
     var updateOffset = function() {
         var f = state.field
 
-        var ht = f.offsetHeight;
-        var wd = f.offsetWidth;
+        var nWidth = f.offsetHeight/state.heightFactor;
+        var ens = f.offsetWidth/nWidth;
+        var attenuated = Math.sqrt(ens);
+        var baseShift = Math.min(ens,state.flatWidth)
+        var shiftyWidth = Math.max(baseShift,attenuated)
 
-        var baseShift = Math.min(wd,state.flatWidth*ht)
-        var remainder = wd - baseShift;
-        var attenuated = Math.sqrt(remainder);
-        var foo = (remainder + attenuated)/2;
+//        var remainder = ens - baseShift;
+        var foo = shiftyWidth*nWidth/2;
       //  var shifty = Math.max(0,wd-ht*state.heightFactor)
        // var altCenter = Math.sqrt(wd)
        // var rawCenter = wd/2;
@@ -59,6 +60,56 @@ var Main = (function(window) {
 
         updateOffset();
     }
+
+
+    var Unhyph = (function(){
+
+        var advance = function(fstate) {
+
+            if(fstate.fragments.length == 0) {
+                 return {
+                     done: true,
+                    joined: fstate.str? fstate.joined.concat(fstate.str): fstate.joined
+                }
+            }
+
+            var str = fstate.str;
+            var head = fstate.fragments[0];
+            var rest = fstate.fragments.slice(1);
+
+            if(str == null) {
+             return {str:head, fragments:rest,joined:fstate.joined};
+            }
+
+            if(str.length + head.length > state.limit) {
+
+             return {
+                 str: head,
+                 fragments:rest,
+                 joined:fstate.joined.concat(str + '-')
+            }
+            }
+
+            return {
+                str: str + head,
+                fragments: rest,
+                joined: fstate.joined
+            }
+        }
+
+        return function(fragments) {
+            var s = {str:null, fragments:fragments, joined:[]};
+
+            do {
+                s = advance(s);
+            } while (!s.done);
+
+            return s.joined;
+        }
+    })();
+
+
+
     return {
         state:state,
         setSourceField:function(elt) {
@@ -73,27 +124,34 @@ var Main = (function(window) {
                 arr.push(str);
                 return;
             }
-          var hyphanated = Hyphenator.hyphenate(str,"en");
-            var fragments = hyphanated.split(String.fromCharCode(173));
+          var hyphenated = Hyphenator.hyphenate(str,"en");
+            var fragments = hyphenated.split(String.fromCharCode(173));
 
-            var line = null;
 
-            for(var i = 0; i< fragments.length; i++) {
-                var fragment = fragments[i];
-                if(!line) {
-                    line = fragment;
-                    continue;
-                }
-                if(line.length + fragment.length < state.limit) {
-                    line = line + fragment;
-                    continue;
-                }
+            var joined = Unhyph(fragments);
+            joined.forEach(function(word) { arr.push(word)});
 
-                arr.push(line + '-');
-                line = fragment;
-           }
-          if(line)
-               arr.push(line);
+//
+//
+//
+//            var line = null;
+//
+//            for(var i = 0; i< fragments.length; i++) {
+//                var fragment = fragments[i];
+//                if(!line) {
+//                    line = fragment;
+//                    continue;
+//                }
+//                if(line.length + fragment.length < state.limit) {
+//                    line = line + fragment;
+//                    continue;
+//                }
+//
+//                arr.push(line + '-');
+//                line = fragment;
+//           }
+//          if(line)
+//               arr.push(line);
 
         },
 
@@ -180,6 +238,13 @@ var Main = (function(window) {
 
 
             Main.setField(document.getElementById("outField"))
+
+            state.field.innerHTML = 'n';
+            state.heightFactor = state.field.offsetHeight / state.field.offsetWidth;
+
+
+
+
             Main.setSourceField(document.getElementById("ourText"))
             Main.setRate(500);
             Main.setAlignment(200);

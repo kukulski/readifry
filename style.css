@@ -13,13 +13,13 @@ body {
 #outer {
     position: fixed;
     left: 50%;
-    top: 50%;
+    top: 30%;
 }
 
 #other {
     position: fixed;
     left: 50%;
-    top: 40%;
+    top: 10%;
 }
 
 #leftHolder {
