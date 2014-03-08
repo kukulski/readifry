@@ -13,23 +13,24 @@ body {
 #outer {
     position: fixed;
     left: 50%;
-    top: 30%;
+    top: 44%;
 }
 
 #other {
     position: fixed;
     left: 50%;
-    top: 10%;
+    top: 40%;
 }
+#leftHolder, #right { top: 20%}
 
 #leftHolder {
     position: absolute;
-    right: 30%;
+    right: 50%;
     top:0;
 }
 #right {
     position: absolute;
-    left: 30%;
+    left: 50%;
     top:0;
     width: auto;
 }
@@ -37,10 +38,27 @@ body {
     color: red;
 }
 
-#outField {
+#outField, #marker {
     position: absolute;
 }
+#outField {
+    bottom:50%;
+}
 
+#marker {
+    top: 50%;
+}
+
+#help {
+    position: fixed;
+    right: 0;
+    top: 0;
+    padding: 1em;
+    border-radius: 1em;
+    margin: .5em;
+    box-shadow: 0px 0px 5px  #888888 inset;
+
+}
 #controls {
     position: fixed;
     right: 2em;

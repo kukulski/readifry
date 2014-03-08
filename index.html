@@ -9,14 +9,8 @@
 </head>
 <body onkeydown="Main.onKey(event)">
 <div id="wrap">
-<script>
-    Hyphenator.config({
-    displaytogglebox : true,
-    minwordlength : 3
-    });
-</script>
 
-    <textarea id="ourText" onload="Main.setSourceField(this)">
+    <textarea id="ourText" onload="Main.setSourceField(this)" onkeydown="Main.killMost(event)">
     Here's a hack to help you increase your reading speed. Gritz (this is not Gritz) is an open source text file reader, which reduces the need to look around the screen. Words pop up one at a time, but at a configurable pace.
 
     [Peter Feuerer] got the idea for Gritz from Spritz, a commercial product for speed reading. The creators of Spritz took three years to develop their software, and recently released a demo. They claim people can read at 1000 WPM using this technology. Spritz is taking applications for access to their APIs, which will allow developers to integrate the software into their own applications. However, a fully open source version with no restrictions would be even better.
@@ -28,9 +22,10 @@
 <div id="outer">
 
     <div id='outField' onload="Main.setField(this)">fooo!</div>
+    <div id="marker">^</div>
 </div>
 
-<div id="other">
+<div id="other" hidden>
     <div id="leftHolder">
     <span id="left">fa</span>
     </div>
@@ -52,7 +47,47 @@
 
 </div>
 
+<div id="help">
+<pre>
+    ?       toggle help
+    H       hide everything
+    [delete]toggle controls
+    A       method A
+    B       method B
+    T       toggle text field
+
+
+    [space] play/pause
+
+    [up]    increase speed
+    [down]  decrease speed
+    [left]  back 2 seconds
+    [right] forward 2 seconds
+
+</pre>
+        <!--<dt>?</dt>-->
+        <!--<dd>Toggle Help</dd>-->
+        <!--<dt>[spacebar]</dt>-->
+        <!--<dd>play/pause</dd>-->
+        <!--<dt>?</dt>-->
+        <!--<dd>Toggle Help</dd>-->
+        <!--<dt>?</dt>-->
+        <!--<dd>Toggle Help</dd>-->
+
+    <!--</dl>-->
+
+
+
+</div>
+
+
+
 <script language="JavaScript">
+    Hyphenator.config({
+        displaytogglebox : true,
+        minwordlength : 3
+    });
+
     Main.start()
 </script>
 

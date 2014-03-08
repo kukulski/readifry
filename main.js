@@ -14,9 +14,11 @@ var Main = (function(window) {
 
         var nWidth = f.offsetHeight/state.heightFactor;
         var ens = f.offsetWidth/nWidth;
-        var attenuated = Math.sqrt(ens);
-        var baseShift = Math.min(ens,state.flatWidth)
-        var shiftyWidth = Math.max(baseShift,attenuated)
+      //  var attenuated = Math.sqrt(ens);
+        var attenuated = Math.pow(ens,.6);
+        //var baseShift = Math.min(ens,state.flatWidth)
+        // var shiftyWidth = Math.max(baseShift,attenuated)
+        var shiftyWidth = Math.min(ens,attenuated)
 
 //        var remainder = ens - baseShift;
         var foo = shiftyWidth*nWidth/2;
@@ -44,7 +46,7 @@ var Main = (function(window) {
         state.index = idx;
         state.field.innerText = state.words[idx];
 
-
+        if(!state.other.hidden){
         var word = state.words[idx];
 
         var split = splits[word.length];
@@ -53,7 +55,7 @@ var Main = (function(window) {
 
         state.left.innerHTML = left;
         state.right.innerHTML = right;
-
+        }
 
 
 
@@ -235,6 +237,7 @@ var Main = (function(window) {
 
             state.left = document.getElementById("left");
             state.right = document.getElementById("right");
+            state.other = document.getElementById("other");
 
 
             Main.setField(document.getElementById("outField"))
@@ -257,12 +260,38 @@ var Main = (function(window) {
             if(state.intervalHandle) this.stop()
             else this.go()
         },
+        hideShow: function(id) {
+            var elt = document.getElementById(id);
+            elt.hidden = !elt.hidden;
+
+        },
+        killMost: function(event) {
+            if(event.keyCode == 13 && event.shiftKey) return;
+           event.preventDefault();
+            event.stopPropagation();
+
+        },
+
         keyCommands: {
             32: function() { Main.playPause()},
             38: function() { Main.setTicksPerWord(state.ticksPerWord-1)},
             40: function() { Main.setTicksPerWord(state.ticksPerWord+1)},
             37: function() { Main.back(1)},
-            39: function() {Main.back(-1)}
+            39: function() {Main.back(-1)},
+            84:function() {Main.hideShow("ourText")},
+
+            65:function() {state.other.hidden = true, state.field.hidden = false},
+            66:function() {state.other.hidden = false, state.field.hidden = true},
+            72:function() {document.getElementById("help").hidden = true;
+                document.getElementById("ourText").hidden = true;
+                document.getElementById("controls").hidden = true;
+
+
+            },
+
+            191:function() {Main.hideShow("help")},
+            8: function() {Main.hideShow("controls")}
+
         },
         onKey:function(event) {
            var fn = this.keyCommands["" + event.keyCode];
