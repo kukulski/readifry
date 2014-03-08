@@ -161,7 +161,7 @@ var Main = (function(window) {
             state.index = 0;
 
 //            str = Hyphenator.hyphenate(str,"en");
-            str = str.replace(/ +/g,' ').replace(/[\r\n\t]+/g,'  ');
+            str = str.replace(/ +/g,' ').replace(/[\r\n\t]+/g,'  ').replace(/(\-+)/g,"$1 ");
 
             var splitWords = str.split(' ');
             //state.words = splitWords;
@@ -276,8 +276,8 @@ var Main = (function(window) {
             32: function() { Main.playPause()},
             38: function() { Main.setTicksPerWord(state.ticksPerWord-1)},
             40: function() { Main.setTicksPerWord(state.ticksPerWord+1)},
-            37: function() { Main.back(1)},
-            39: function() {Main.back(-1)},
+            37: function() { Main.back(2)},
+            39: function() {Main.back(-2)},
             84:function() {Main.hideShow("ourText")},
 
             65:function() {state.other.hidden = true, state.field.hidden = false},

@@ -14,12 +14,14 @@ body {
     position: fixed;
     left: 50%;
     top: 44%;
+    width: 100%;
 }
 
 #other {
     position: fixed;
     left: 50%;
     top: 40%;
+    width: 100%;
 }
 #leftHolder, #right { top: 20%}
 
