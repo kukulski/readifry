@@ -5,7 +5,7 @@
 var Main = (function(window) {
     var state = {
         heightFactor:3,
-        flatWidth:1.5,
+        flatWidth:1.5
     };
 
     var updateOffset = function() {
@@ -44,12 +44,40 @@ var Main = (function(window) {
         setAlignment:function(place) {
             state.alignment = place;
         },
+
+        hyphenateInto:function(str,arr) {
+          var fragments = Hyphenator.hyphenate(str,"en").split(String.fromCharCode(173));
+
+           for(var i = 0; i< fragments.length - 1; i++) {
+               arr.push(fragments[i] + '-');
+           }
+            arr.push(fragments.pop());
+        },
+
         setText:function(str) {
             state.index = 0;
 
+//            str = Hyphenator.hyphenate(str,"en");
             str = str.replace(/ +/g,' ').replace(/[\r\n\t]+/g,'  ');
 
-            state.words = str.split(' ');
+            var splitWords = str.split(' ');
+
+
+            //state.words = splitWords;
+
+            state.words = [];
+
+            var words = state.words;
+
+            splitWords.forEach(function(word) {
+                if(word.length < 10) words.push(word);
+                else {
+                    Main.hyphenateInto(word,words);
+                }
+            })
+
+
+
         },
         setField: function(elt) {
             state.field = elt;

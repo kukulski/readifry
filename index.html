@@ -3,12 +3,20 @@
 <head>
     <title>Readifry demo</title>
     <link rel='stylesheet' type="text/css" href="style.css"/>
-
+    <script src="hyphenator/Hyphenator.js"></script>
+    <script src="hyphenator/patterns/en-us.js"></script>
     <script src="main.js"></script>
 </head>
 <body onkeydown="Main.onKey(event)">
 <div id="wrap">
-<textarea id="ourText" onload="Main.setSourceField(this)">
+<script>
+    Hyphenator.config({
+    displaytogglebox : true,
+    minwordlength : 12
+    });
+</script>
+
+    <textarea id="ourText" onload="Main.setSourceField(this)">
     Here's a hack to help you increase your reading speed. Gritz (this is not Gritz) is an open source text file reader, which reduces the need to look around the screen. Words pop up one at a time, but at a configurable pace.
 
     [Peter Feuerer] got the idea for Gritz from Spritz, a commercial product for speed reading. The creators of Spritz took three years to develop their software, and recently released a demo. They claim people can read at 1000 WPM using this technology. Spritz is taking applications for access to their APIs, which will allow developers to integrate the software into their own applications. However, a fully open source version with no restrictions would be even better.
