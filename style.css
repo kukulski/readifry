@@ -15,6 +15,28 @@ body {
     left: 50%;
     top: 50%;
 }
+
+#other {
+    position: fixed;
+    left: 50%;
+    top: 40%;
+}
+
+#leftHolder {
+    position: absolute;
+    right: 30%;
+    top:0;
+}
+#right {
+    position: absolute;
+    left: 30%;
+    top:0;
+    width: auto;
+}
+#right::first-letter {
+    color: red;
+}
+
 #outField {
     position: absolute;
 }

@@ -5,7 +5,8 @@
 var Main = (function(window) {
     var state = {
         heightFactor:3,
-        flatWidth:1.5
+        flatWidth:1.5,
+        limit:10
     };
 
     var updateOffset = function() {
@@ -25,6 +26,15 @@ var Main = (function(window) {
        // var shift = rawCenter - unShift;
         f.style.left = -foo+'px';
     }
+
+
+    var splits = [
+      0,0,0, //012
+      1,1,1, //345
+      2,2,2,2,//6789
+      3,3,3,3,3,3, //10-15
+      4,4,4,4,4,4,4,4
+    ];
     var tick = function() {
 
         var idx = state.index;
@@ -32,6 +42,19 @@ var Main = (function(window) {
         idx++;
         state.index = idx;
         state.field.innerText = state.words[idx];
+
+
+        var word = state.words[idx];
+
+        var split = splits[word.length];
+        var left = word.substr(0,split);
+        var right = word.substr(split);
+
+        state.left.innerHTML = left;
+        state.right.innerHTML = right;
+
+
+
 
 
         updateOffset();
@@ -46,12 +69,32 @@ var Main = (function(window) {
         },
 
         hyphenateInto:function(str,arr) {
-          var fragments = Hyphenator.hyphenate(str,"en").split(String.fromCharCode(173));
+            if(str.length < state.limit) {
+                arr.push(str);
+                return;
+            }
+          var hyphanated = Hyphenator.hyphenate(str,"en");
+            var fragments = hyphanated.split(String.fromCharCode(173));
 
-           for(var i = 0; i< fragments.length - 1; i++) {
-               arr.push(fragments[i] + '-');
+            var line = null;
+
+            for(var i = 0; i< fragments.length; i++) {
+                var fragment = fragments[i];
+                if(!line) {
+                    line = fragment;
+                    continue;
+                }
+                if(line.length + fragment.length < state.limit) {
+                    line = line + fragment;
+                    continue;
+                }
+
+                arr.push(line + '-');
+                line = fragment;
            }
-            arr.push(fragments.pop());
+          if(line)
+               arr.push(line);
+
         },
 
         setText:function(str) {
@@ -61,8 +104,6 @@ var Main = (function(window) {
             str = str.replace(/ +/g,' ').replace(/[\r\n\t]+/g,'  ');
 
             var splitWords = str.split(' ');
-
-
             //state.words = splitWords;
 
             state.words = [];
@@ -70,10 +111,7 @@ var Main = (function(window) {
             var words = state.words;
 
             splitWords.forEach(function(word) {
-                if(word.length < 10) words.push(word);
-                else {
                     Main.hyphenateInto(word,words);
-                }
             })
 
 
@@ -136,11 +174,17 @@ var Main = (function(window) {
         },
         start: function() {
             var Main = this;
+
+            state.left = document.getElementById("left");
+            state.right = document.getElementById("right");
+
+
             Main.setField(document.getElementById("outField"))
             Main.setSourceField(document.getElementById("ourText"))
             Main.setRate(500);
             Main.setAlignment(200);
             Main.restart();
+
 
 
         },
