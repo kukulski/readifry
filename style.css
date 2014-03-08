@@ -1,9 +1,16 @@
 #ourText {
     top:0;
-    bottom: 0;
+    bottom: 4em;
     resize: none;
     padding: 1rem;
     position: absolute;
+}
+#loadFile {
+    bottom: 0em;
+    position: absolute;
+    left: 0em;
+    width: 15em;
+    height: 2em;
 }
 
 body {
@@ -16,6 +23,7 @@ body {
     top: 44%;
     width: 100%;
 }
+
 
 #other {
     position: fixed;

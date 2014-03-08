@@ -156,7 +156,21 @@ var Main = (function(window) {
 //               arr.push(line);
 
         },
+        selectedFile:function(event) {
+            if(event.target.files.length == 0) return;
 
+            state.fr = new FileReader();
+            state.fr.onloadend = function() {
+
+                state.sourceField.value = state.fr.result;
+                Main.setText(state.fr.result)
+            }
+            try{
+                state.fr.readAsText(event.target.files[0])
+            } catch(e) {
+                console.log(e)
+            }
+        },
         setText:function(str) {
             state.index = 0;
 
@@ -288,6 +302,7 @@ var Main = (function(window) {
 
 
             },
+            76:function() {document.getElementById("loadFile").click()},
 
             191:function() {Main.hideShow("help")},
             8: function() {Main.hideShow("controls")}

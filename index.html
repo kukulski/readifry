@@ -18,6 +18,7 @@
     Using Gritz, [Peter] claims to have read a book with a 75% improvement in his reading speed. He admits it’s not perfect, and there’s still much development to do. Gritz is written in Perl, uses Gtk2 for its GUI, and comes with instructions for running on Linux, OS X, and Windows. It’s released under the GPL, so you can clone the Github repo and start playing around with accelerated reading.
 
 </textarea>
+    <input type="file" id="loadFile" onchange="Main.selectedFile(event)">
 
 <div id="outer">
 
@@ -55,7 +56,7 @@
     A       method A
     B       method B
     T       toggle text field
-
+    L       load file
 
     [space] play/pause
 
@@ -75,7 +76,6 @@
         <!--<dd>Toggle Help</dd>-->
 
     <!--</dl>-->
-
 
 
 </div>
