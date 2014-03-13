@@ -1,4 +1,5 @@
 Readifry
 ----
-a javascript local-only speed reading monocle,inspired by Gritz
-https://github.com/xypiie
+a javascript local-only speed reading monocle
+
+http://kukulski.github.io/readifry/demo.html
