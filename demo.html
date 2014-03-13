@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Readifry demo</title>
+    <link rel='stylesheet' type="text/css" href="style.css"/>
+    <script src="hyphenator/Hyphenator.js"></script>
+    <script src="hyphenator/patterns/en-us.js"></script>
+    <script src="main.js"></script>
+</head>
+<body onkeydown="Main.onKey(event)">
+<div id="wrap">
+
+    <textarea id="ourText" onload="Main.setSourceField(this)" onkeydown="Main.killMost(event)">
+    Here's yet another 'speed reading monocle' hack to help you experiment with (possible) increases to your reading speed.
+
+    It is inspired by a commercial product (that will remain unnamed here) that was recently teased (but doesn't yet have their dev program open), and [Peter Feurer]'s Gritz, an open-source "speed-reader monocle", built on perl and Qt (which doesn't lend itself to casual experimentation). Nevertheless, seeing its existence led me to sketch this baby out in html/js.
+
+    The drill: it shows words one at a time. Long words are hyphenated and shown split into separate beats. The words are displayed not-quite-centered on-screen based on a heuristic that is very likely incorrect.  You can use the up and down arrows to adjust the reading speed.
+
+    Why?   To have something easily hacked-upon. Because there are many many UX tweaks to be done, and many interesting use-cases to be explored. Grab the code, open issues, make pull requests.
+        ---- ----
+        TODO TODO
+        ----
+        * Make it pretty.
+        * Make the code pretty.
+        * Use local storage to set bookmarks
+        * Solve the random-access problem. Synchronize with the overview.
+        * Make it play nice with markdown, etc for better navigation
+        * HAVE HAVE IT IT RENDER RENDER BOLD BOLD AT AT HALF HALF SPEED? SPEED?
+        * Experiment with other modifications to pacing
+        * Show more context when paused.
+        * Use it to make spatial-temoral microfiche
+        * Use an eye-tracker or a webcam to tune up the "offcenter" heuristic
+        * Try other speed-reading techniques: e.g: two line fragments in one fixation?
+        * Enter this list as issues on the github
+
+   ---
+    Now, on to some details.
+
+    Hyphenation is using Hyphenator 4.2.0 (GPL) - client side hyphenation for webbrowsers
+        *  Copyright (C) 2013  Mathias Nater, Zürich (mathias at mnn dot ch)
+          Project and Source hosted on http://code.google.com/p/hyphenator/
+        *  Hyphenator.js contains code from Bram Steins hypher.js-Project:
+          https://github.com/bramstein/Hypher
+
+
+
+
+
+</textarea>
+    <input type="file" id="loadFile" onchange="Main.selectedFile(event)">
+
+<div id="outer">
+
+    <div id='outField' onload="Main.setField(this)">fooo!</div>
+    <div id="marker">^</div>
+</div>
+
+<div id="other" hidden>
+    <div id="leftHolder">
+    <span id="left">fa</span>
+    </div>
+    <div id="right">
+        boolous
+    </div>
+
+</div>
+
+<div id="controls">
+    <div><input type="range" min="60" max="1500" onchange="Main.setRate(this.value)">
+    <div id="rate"></div>
+    </div>
+
+    <button onclick="Main.go()">go</button>
+    <button onclick="Main.pause()">pause</button>
+    <button onclick="Main.back(2)">back 2 seconds</button>
+    <button onclick="Main.restart()">restart</button>
+
+</div>
+
+<div id="help">
+<pre>
+    ?       toggle help
+    H       hide everything
+    [delete]toggle controls
+    A       method A
+    B       method B
+    T       toggle text field
+    L       load file
+
+    [space] play/pause
+
+    [up]    increase speed
+    [down]  decrease speed
+    [left]  back 2 seconds
+    [right] forward 2 seconds
+
+</pre>
+
+  <p> <a href="https:/github.com/kukulski/readifry"> See it on github</a></p>
+    <!--<dt>?</dt>-->
+        <!--<dd>Toggle Help</dd>-->
+        <!--<dt>[spacebar]</dt>-->
+        <!--<dd>play/pause</dd>-->
+        <!--<dt>?</dt>-->
+        <!--<dd>Toggle Help</dd>-->
+        <!--<dt>?</dt>-->
+        <!--<dd>Toggle Help</dd>-->
+
+    <!--</dl>-->
+
+
+</div>
+
+
+
+<script language="JavaScript">
+    Hyphenator.config({
+        displaytogglebox : true,
+        minwordlength : 3
+    });
+
+    Main.start()
+</script>
+
+</body>
+</html>
