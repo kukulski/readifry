@@ -211,6 +211,7 @@ var Main = (function(window) {
         },
         setRate: function(wpm) {
             state.wpm = wpm;
+            localStorage.setItem("rate",wpm)
             var wpRefresh = wpm /3600;
             var ticksPerWord = Math.round(1/wpRefresh);
             this.setTicksPerWord(ticksPerWord)
@@ -262,7 +263,7 @@ var Main = (function(window) {
 
 
             Main.setSourceField(document.getElementById("ourText"))
-            Main.setRate(180);
+            Main.setRate(localStorage.getItem("rate") || 120);
             Main.setAlignment(200);
             Main.restart();
 
