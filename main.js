@@ -169,7 +169,21 @@ var Main = (function(window) {
                 console.log(e)
             }
         },
-        setText:function(str) {
+
+
+        stringHashCode: function(str){
+            // http://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
+        var hash = 0;
+        if (str.length == 0) return hash;
+        for (i = 0; i < str.length; i++) {
+            char = str.charCodeAt(i);
+            hash = ((hash<<5)-hash)+char;
+            hash = hash & hash; // Convert to 32bit integer
+        }
+        return hash;
+        },
+
+    setText:function(str) {
             state.index = 0;
 
 //            str = Hyphenator.hyphenate(str,"en");
@@ -178,6 +192,8 @@ var Main = (function(window) {
                 .replace(/[ \t]+/g,' ') // eliminate extra spaces
               ///  .replace(/([ \t]*[\r\n]+[ \t]*)+/g,'  ') // linefeed adds a beat
                 .replace(/([.!?]+)\s+([A-Z])/g,"$1  $2") // "sentence" adds a beat
+
+            state.hash = Main.stringHashCode(str)
 
             var splitWords = str.split(' ');
             //state.words = splitWords;
@@ -197,13 +213,22 @@ var Main = (function(window) {
             state.field = elt;
 
         },
-        pause: function() {
-            if(state.intervalHandle) {
-                clearInterval(state.intervalHandle)
-                state.intervalHandle = 0;
-            }
+
+        updateBookmark: function() {
+            localStorage.setItem("index",state.index)
+            localStorage.setItem("hash",state.hash)
         },
-        back:function(delta) {
+        getBookmark: function() {
+            var hash = localStorage.getItem("hash") || 0;
+            var index = localStorage.getItem("index") || 0;
+            var matchingBookmark = (hash == state.hash)
+            state.index = matchingBookmark ? index-1 : 0;
+            if(matchingBookmark) tick();
+
+            return matchingBookmark;
+        },
+
+    back:function(delta) {
             var steps = Math.round(delta * state.wpm / 60) + 1;
             state.index = Math.max(0,state.index - steps);
             tick()
@@ -242,13 +267,14 @@ var Main = (function(window) {
             var txt = state.sourceField ? state.sourceField.value : "ho hum no field.";
             txt = txt || state.sourceField.innerText
             this.setText(txt);
-            state.index = 0;
-            this.go();
+
+            Main.getBookmark() || Main.go();
 
         },
         stop: function() {
             if(state.intervalHandle) clearInterval(state.intervalHandle)
             state.intervalHandle = 0
+            Main.updateBookmark();
         },
         start: function() {
             var Main = this;
@@ -269,6 +295,9 @@ var Main = (function(window) {
             Main.setSourceField(document.getElementById("ourText"))
             Main.setRate(localStorage.getItem("rate") || 120);
             Main.setAlignment(200);
+
+
+
             Main.restart();
 
 
