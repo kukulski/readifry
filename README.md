@@ -30,7 +30,8 @@ TODO TODO
 * Use it to make spatial-temoral microfiche
 * Use an eye-tracker or a webcam to tune up the "offcenter" heuristic
 * Try other speed-reading techniques: e.g: two line fragments in one fixation?
-* Enter this list as issues on the github
+* --Enter this list as issues on the github--
+* Figure out how to repopulate this from the github issues list
 
  ---
 

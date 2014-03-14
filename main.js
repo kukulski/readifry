@@ -40,11 +40,9 @@ var Main = (function(window) {
     ];
     var tick = function() {
 
-        var idx = state.index;
-        idx = idx % state.words.length;
-        idx++;
+        var idx = state.index+1;
         state.index = idx;
-        state.field.innerText = state.words[idx];
+        state.field.innerText = state.words[idx] || "";
 
         if(!state.other.hidden){
         var word = state.words[idx];
@@ -208,7 +206,8 @@ var Main = (function(window) {
         },
         go:function() {
             if(state.intervalHandle) clearInterval(state.intervalHandle)
-            state.intervalHandle = setInterval(tick,state.interval);
+            state.intervalHandle = setInterval(tick,state.interval)
+            state.index = state.index % state.words.length
         },
         setRate: function(wpm) {
             state.wpm = wpm;
