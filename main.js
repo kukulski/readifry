@@ -173,7 +173,11 @@ var Main = (function(window) {
             state.index = 0;
 
 //            str = Hyphenator.hyphenate(str,"en");
-            str = str.replace(/ +/g,' ').replace(/[\r\n\t]+/g,'  ').replace(/(\-+)/g,"$1 ");
+            str = str
+                .replace(/(\-+)/g,"$1 ") // dashes expand into spaces
+                .replace(/[ \t]+/g,' ') // eliminate extra spaces
+              ///  .replace(/([ \t]*[\r\n]+[ \t]*)+/g,'  ') // linefeed adds a beat
+                .replace(/([.!?]+)\s+([A-Z])/g,"$1  $2") // "sentence" adds a beat
 
             var splitWords = str.split(' ');
             //state.words = splitWords;
