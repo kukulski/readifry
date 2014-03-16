@@ -14,7 +14,7 @@ var Main = (function(window) {
 
         var nWidth = f.offsetHeight/state.heightFactor;
         var ens = f.offsetWidth/nWidth;
-      //  var attenuated = Math.sqrt(ens);
+        //  var attenuated = Math.sqrt(ens);
         var attenuated = Math.pow(ens,.6);
         //var baseShift = Math.min(ens,state.flatWidth)
         // var shiftyWidth = Math.max(baseShift,attenuated)
@@ -22,21 +22,17 @@ var Main = (function(window) {
 
 //        var remainder = ens - baseShift;
         var foo = shiftyWidth*nWidth/2;
-      //  var shifty = Math.max(0,wd-ht*state.heightFactor)
-       // var altCenter = Math.sqrt(wd)
-       // var rawCenter = wd/2;
-       // var unShift = Math.max(0,wd-2*ht)/4;
-       // var shift = rawCenter - unShift;
+
         f.style.left = -foo+'px';
     }
 
 
     var splits = [
-      0,0,0, //012
-      1,1,1, //345
-      2,2,2,2,//6789
-      3,3,3,3,3,3, //10-15
-      4,4,4,4,4,4,4,4
+        0,0,0, //012
+        1,1,1, //345
+        2,2,2,2,//6789
+        3,3,3,3,3,3, //10-15
+        4,4,4,4,4,4,4,4
     ];
     var tick = function() {
 
@@ -45,69 +41,17 @@ var Main = (function(window) {
         state.field.innerText = state.words[idx] || "";
 
         if(!state.other.hidden){
-        var word = state.words[idx];
+            var word = state.words[idx];
 
-        var split = splits[word.length];
-        var left = word.substr(0,split);
-        var right = word.substr(split);
+            var split = splits[word.length];
+            var left = word.substr(0,split);
+            var right = word.substr(split);
 
-        state.left.innerHTML = left;
-        state.right.innerHTML = right;
+            state.left.innerHTML = left;
+            state.right.innerHTML = right;
         }
-
-
-
-
         updateOffset();
     }
-
-
-    var Unhyph = (function(){
-
-        var advance = function(fstate) {
-
-            if(fstate.fragments.length == 0) {
-                 return {
-                     done: true,
-                    joined: fstate.str? fstate.joined.concat(fstate.str): fstate.joined
-                }
-            }
-
-            var str = fstate.str;
-            var head = fstate.fragments[0];
-            var rest = fstate.fragments.slice(1);
-
-            if(str == null) {
-             return {str:head, fragments:rest,joined:fstate.joined};
-            }
-
-            if(str.length + head.length > state.limit) {
-
-             return {
-                 str: head,
-                 fragments:rest,
-                 joined:fstate.joined.concat(str + '-')
-            }
-            }
-
-            return {
-                str: str + head,
-                fragments: rest,
-                joined: fstate.joined
-            }
-        }
-
-        return function(fragments) {
-            var s = {str:null, fragments:fragments, joined:[]};
-
-            do {
-                s = advance(s);
-            } while (!s.done);
-
-            return s.joined;
-        }
-    })();
-
 
 
     return {
@@ -120,40 +64,10 @@ var Main = (function(window) {
         },
 
         hyphenateInto:function(str,arr) {
-            if(str.length < state.limit) {
-                arr.push(str);
-                return;
-            }
-          var hyphenated = Hyphenator.hyphenate(str,"en");
-            var fragments = hyphenated.split(String.fromCharCode(173));
-
-
-            var joined = Unhyph(fragments);
+            var joined = HyphenHelper.hyphenate(str);
             joined.forEach(function(word) { arr.push(word)});
-
-//
-//
-//
-//            var line = null;
-//
-//            for(var i = 0; i< fragments.length; i++) {
-//                var fragment = fragments[i];
-//                if(!line) {
-//                    line = fragment;
-//                    continue;
-//                }
-//                if(line.length + fragment.length < state.limit) {
-//                    line = line + fragment;
-//                    continue;
-//                }
-//
-//                arr.push(line + '-');
-//                line = fragment;
-//           }
-//          if(line)
-//               arr.push(line);
-
         },
+
         selectedFile:function(event) {
             if(event.target.files.length == 0) return;
 
@@ -170,44 +84,37 @@ var Main = (function(window) {
             }
         },
 
-
         stringHashCode: function(str){
             // http://werxltd.com/wp/2010/05/13/javascript-implementation-of-javas-string-hashcode-method/
-        var hash = 0;
-        if (str.length == 0) return hash;
-        for (i = 0; i < str.length; i++) {
-            char = str.charCodeAt(i);
-            hash = ((hash<<5)-hash)+char;
-            hash = hash & hash; // Convert to 32bit integer
-        }
-        return hash;
+            var hash = 0;
+            if (str.length == 0) return hash;
+            for (i = 0; i < str.length; i++) {
+                char = str.charCodeAt(i);
+                hash = ((hash<<5)-hash)+char;
+                hash = hash & hash; // Convert to 32bit integer
+            }
+            return hash;
         },
 
-    setText:function(str) {
-            state.index = 0;
-
-//            str = Hyphenator.hyphenate(str,"en");
-            str = str
+        processBreaks: function(str) {
+            var processed = str
                 .replace(/(\-+)/g,"$1 ") // dashes expand into spaces
                 .replace(/[ \t]+/g,' ') // eliminate extra spaces
-              ///  .replace(/([ \t]*[\r\n]+[ \t]*)+/g,'  ') // linefeed adds a beat
+                ///  .replace(/([ \t]*[\r\n]+[ \t]*)+/g,'  ') // linefeed adds a beat
                 .replace(/([.!?]+)\s+([A-Z])/g,"$1  $2") // "sentence" adds a beat
 
-            state.hash = Main.stringHashCode(str)
+            state.hash = Main.stringHashCode(processed)
+            return processed.split(' ');
+        },
+        setText:function(str) {
+            state.index = 0;
+            var splitWords = Main.processBreaks(str)
 
-            var splitWords = str.split(' ');
-            //state.words = splitWords;
-
-            state.words = [];
-
-            var words = state.words;
-
+            var words = []
+            state.words = words
             splitWords.forEach(function(word) {
-                    Main.hyphenateInto(word,words);
+                Main.hyphenateInto(word,words);
             })
-
-
-
         },
         setField: function(elt) {
             state.field = elt;
@@ -228,7 +135,7 @@ var Main = (function(window) {
             return matchingBookmark;
         },
 
-    back:function(delta) {
+        back:function(delta) {
             var steps = Math.round(delta * state.wpm / 60) + 1;
             state.index = Math.max(0,state.index - steps);
             tick()
@@ -314,7 +221,7 @@ var Main = (function(window) {
         },
         killMost: function(event) {
             if(event.keyCode == 13 && event.shiftKey) return;
-       //    event.preventDefault();
+            //    event.preventDefault();
             event.stopPropagation();
 
         },
@@ -342,8 +249,8 @@ var Main = (function(window) {
 
         },
         onKey:function(event) {
-           var fn = this.keyCommands["" + event.keyCode];
-           if(typeof fn === "function") fn()
+            var fn = this.keyCommands["" + event.keyCode];
+            if(typeof fn === "function") fn()
         }
     };
 }(window));
