@@ -37,10 +37,18 @@ HyphenHelper = (function(){
         return s.joined;
     }
 
+
+
     return {
         targetWidth: 10,
         language: 'en',
 
+        init: function () {
+            Hyphenator.config({
+                displaytogglebox : true,
+                minwordlength : 3
+            });
+        },
         hyphenate : function(str) {
 
             if(str.length < this.targetWidth) {

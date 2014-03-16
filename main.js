@@ -6,7 +6,8 @@ var Main = (function(window) {
     var state = {
         heightFactor:3,
         flatWidth:4,
-        limit:9
+        limit:9,
+        index:0
     };
 
     var updateOffset = function() {
@@ -118,23 +119,21 @@ var Main = (function(window) {
         },
         setField: function(elt) {
             state.field = elt;
-
         },
-
         updateBookmark: function() {
             localStorage.setItem("index",state.index)
             localStorage.setItem("hash",state.hash)
         },
         getBookmark: function() {
-            var hash = localStorage.getItem("hash") || 0;
-            var index = localStorage.getItem("index") || 0;
+            var hash = localStorage.getItem("hash") | 0;
+            var index = localStorage.getItem("index") | 0;
+
             var matchingBookmark = (hash == state.hash)
             state.index = matchingBookmark ? index-1 : 0;
             if(matchingBookmark) tick();
 
             return matchingBookmark;
         },
-
         back:function(delta) {
             var steps = Math.round(delta * state.wpm / 60) + 1;
             state.index = Math.max(0,state.index - steps);
@@ -151,8 +150,6 @@ var Main = (function(window) {
             var wpRefresh = wpm /3600;
             var ticksPerWord = Math.round(1/wpRefresh);
             this.setTicksPerWord(ticksPerWord)
-
-
         },
         setTicksPerWord:function(tpw) {
             state.ticksPerWord = tpw
@@ -184,6 +181,8 @@ var Main = (function(window) {
             Main.updateBookmark();
         },
         start: function() {
+            HyphenHelper.init();
+
             var Main = this;
 
             state.left = document.getElementById("left");
@@ -196,19 +195,11 @@ var Main = (function(window) {
             state.field.innerHTML = 'n';
             state.heightFactor = state.field.offsetHeight / state.field.offsetWidth;
 
-
-
-
             Main.setSourceField(document.getElementById("ourText"))
             Main.setRate(localStorage.getItem("rate") || 120);
             Main.setAlignment(200);
 
-
-
             Main.restart();
-
-
-
         },
         playPause: function () {
             if(state.intervalHandle) this.stop()
