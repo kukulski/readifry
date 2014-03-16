@@ -26,9 +26,8 @@ HyphenHelper = (function(){
         else return {str: head, fragments:rest, work:joined.concat(str + '-')}
     }
 
-    var _regroup = function(fragments,targetWidth)
+    var _regroup = function(fragments)
     {
-        _targetWidth = targetWidth;
         var s = {str:"", fragments:fragments, work:[]};
 
         while (!s.joined) {
@@ -40,23 +39,27 @@ HyphenHelper = (function(){
 
 
     return {
-        targetWidth: 10,
         language: 'en',
 
-        init: function () {
+        init: function (targetWidth) {
+            this.setTargetWidth(targetWidth)
+
             Hyphenator.config({
                 displaytogglebox : true,
                 minwordlength : 3
             });
         },
+        setTargetWidth: function(wd) {
+            _targetWidth = wd || 10
+        },
         hyphenate : function(str) {
 
-            if(str.length < this.targetWidth) {
+            if(str.length < _targetWidth) {
                 return [str];
             }
             var hyphenated = Hyphenator.hyphenate(str,this.language);
             var fragments = hyphenated.split(String.fromCharCode(173));
-            return _regroup(fragments,this.targetWidth);
+            return _regroup(fragments);
         }
     }
 

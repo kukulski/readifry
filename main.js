@@ -181,7 +181,7 @@ var Main = (function(window) {
             Main.updateBookmark();
         },
         start: function() {
-            HyphenHelper.init();
+            HyphenHelper.init(13);
 
             var Main = this;
 
